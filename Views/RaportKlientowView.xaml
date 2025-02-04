@@ -1,0 +1,166 @@
+﻿<Window x:Class="SalonFryzjerski.Views.RaportKlientowView"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Raport Klientów"
+        Height="600"
+        Width="800"
+        WindowStartupLocation="CenterScreen"
+        Background="Black">
+
+    <Window.Resources>
+
+        <!-- Styl etykiet (Label) -->
+        <Style x:Key="LabelStyle" TargetType="Label">
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+        </Style>
+
+        <!-- Styl TextBoxów -->
+        <Style x:Key="InputTextBoxStyle" TargetType="TextBox">
+            <Setter Property="Background" Value="Black"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="BorderBrush" Value="White"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="Padding" Value="5"/>
+            <Setter Property="FontSize" Value="14"/>
+        </Style>
+
+        <!-- Styl przycisku 'Filtruj' (czarny, biały, hover -> zielony) -->
+        <Style x:Key="FiltrujButtonStyle" TargetType="Button">
+            <Setter Property="Height" Value="30"/>
+            <Setter Property="Width" Value="80"/>
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="Padding" Value="5,2"/>
+            <Setter Property="Background" Value="Black"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="BorderBrush" Value="White"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="Margin" Value="10,0"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Background" Value="Green"/>
+                    <Setter Property="Foreground" Value="Black"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+
+        <!-- Styl przycisku 'Resetuj' (czarny, biały, hover -> czerwony) -->
+        <Style x:Key="ResetButtonStyle" TargetType="Button">
+            <Setter Property="Height" Value="30"/>
+            <Setter Property="Width" Value="80"/>
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="Padding" Value="5,2"/>
+            <Setter Property="Background" Value="Black"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="BorderBrush" Value="Red"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="Margin" Value="10,0"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Background" Value="Red"/>
+                    <Setter Property="Foreground" Value="Black"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+
+        <!-- Styl ListView -->
+        <Style x:Key="ListViewStyle" TargetType="ListView">
+            <Setter Property="Background" Value="Black"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="BorderBrush" Value="White"/>
+            <Setter Property="BorderThickness" Value="1"/>
+        </Style>
+
+        <!-- Styl nagłówków (GridViewColumnHeader) -->
+        <Style TargetType="GridViewColumnHeader">
+            <Setter Property="Background" Value="Black"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="BorderBrush" Value="White"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+        </Style>
+
+        <!-- Styl wierszy (ListViewItem) -->
+        <Style TargetType="ListViewItem">
+            <Setter Property="Background" Value="Black"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Style.Triggers>
+                <!-- Podświetlenie zaznaczonego wiersza -->
+                <Trigger Property="IsSelected" Value="True">
+                    <Setter Property="Background" Value="#333333"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+
+    </Window.Resources>
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+
+        <!-- Sekcja wyszukiwania (filtrów) -->
+        <StackPanel Orientation="Horizontal"
+                    Margin="10">
+
+            <!-- Imię -->
+            <Label Content="Imię:"
+                   Style="{StaticResource LabelStyle}"
+                   VerticalAlignment="Center"
+                   Margin="0,0,5,0"/>
+            <TextBox Text="{Binding ImieFiltr}"
+                     Width="150"
+                     Margin="10,0"
+                     Style="{StaticResource InputTextBoxStyle}"/>
+
+            <!-- Nazwisko -->
+            <Label Content="Nazwisko:"
+                   Style="{StaticResource LabelStyle}"
+                   VerticalAlignment="Center"
+                   Margin="0,0,5,0"/>
+            <TextBox Text="{Binding NazwiskoFiltr}"
+                     Width="150"
+                     Margin="10,0"
+                     Style="{StaticResource InputTextBoxStyle}"/>
+
+            <!-- Telefon -->
+            <Label Content="Telefon:"
+                   Style="{StaticResource LabelStyle}"
+                   VerticalAlignment="Center"
+                   Margin="0,0,5,0"/>
+            <TextBox Text="{Binding TelefonFiltr}"
+                     Width="150"
+                     Margin="10,0"
+                     Style="{StaticResource InputTextBoxStyle}"/>
+
+            <!-- Przyciski Filtruj / Resetuj -->
+            <Button Content="Filtruj"
+                    Command="{Binding FiltrujCommand}"
+                    Style="{StaticResource FiltrujButtonStyle}"/>
+
+            <Button Content="Resetuj"
+                    Command="{Binding ResetujCommand}"
+                    Style="{StaticResource ResetButtonStyle}"/>
+        </StackPanel>
+
+        <!-- Lista klientów - Raport -->
+        <ListView ItemsSource="{Binding WynikKlientow}"
+                  Grid.Row="1"
+                  Margin="10"
+                  Style="{StaticResource ListViewStyle}">
+            <ListView.View>
+                <GridView>
+                    <GridViewColumn Header="Imię" DisplayMemberBinding="{Binding Imie}" Width="150" />
+                    <GridViewColumn Header="Nazwisko" DisplayMemberBinding="{Binding Nazwisko}" Width="150" />
+                    <GridViewColumn Header="Telefon" DisplayMemberBinding="{Binding Telefon}" Width="200" />
+                </GridView>
+            </ListView.View>
+        </ListView>
+    </Grid>
+</Window>

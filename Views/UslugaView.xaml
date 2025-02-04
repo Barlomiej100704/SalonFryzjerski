@@ -1,0 +1,161 @@
+<Window x:Class="SalonFryzjerski.Views.UslugaView"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Zarządzanie Usługami"
+        Height="400"
+        Width="600"
+        WindowStartupLocation="CenterScreen"
+        Background="Black">
+
+    <Window.Resources>
+
+        <!-- Styl etykiet (Label) -->
+        <Style x:Key="LabelStyle" TargetType="Label">
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+        </Style>
+
+        <!-- Styl TextBoxów (czarne tło, biała czcionka, biała ramka) -->
+        <Style x:Key="InputTextBoxStyle" TargetType="TextBox">
+            <Setter Property="Background" Value="Black"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="BorderBrush" Value="White"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="Padding" Value="5"/>
+            <Setter Property="FontSize" Value="14"/>
+        </Style>
+
+        <!-- Styl przycisku „Dodaj Usługę” (czarny, biały, hover -> zielony) -->
+        <Style x:Key="AddButtonStyle" TargetType="Button">
+            <Setter Property="Height" Value="35"/>
+            <Setter Property="Width" Value="150"/>
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="Padding" Value="10,5"/>
+            <Setter Property="Background" Value="Black"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="BorderBrush" Value="White"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="Margin" Value="5"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Background" Value="Green"/>
+                    <Setter Property="Foreground" Value="Black"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+
+        <!-- Styl przycisku „Usuń Usługę” (czarny, biały, hover -> czerwony) -->
+        <Style x:Key="DeleteButtonStyle" TargetType="Button">
+            <Setter Property="Height" Value="35"/>
+            <Setter Property="Width" Value="150"/>
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="Padding" Value="10,5"/>
+            <Setter Property="Background" Value="Black"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="BorderBrush" Value="Red"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="Margin" Value="5"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Background" Value="Red"/>
+                    <Setter Property="Foreground" Value="Black"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+
+        <!-- Styl ListView (czarne tło, białe napisy, biała ramka) -->
+        <Style x:Key="ListViewStyle" TargetType="ListView">
+            <Setter Property="Background" Value="Black"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="BorderBrush" Value="White"/>
+            <Setter Property="BorderThickness" Value="1"/>
+        </Style>
+
+        <!-- Styl nagłówków GridViewColumnHeader -->
+        <Style TargetType="GridViewColumnHeader">
+            <Setter Property="Background" Value="Black"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="BorderBrush" Value="White"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+        </Style>
+
+        <!-- Styl wierszy ListViewItem -->
+        <Style TargetType="ListViewItem">
+            <Setter Property="Background" Value="Black"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Style.Triggers>
+                <!-- Podświetlenie zaznaczonego wiersza -->
+                <Trigger Property="IsSelected" Value="True">
+                    <Setter Property="Background" Value="#333333"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+
+    </Window.Resources>
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="3*" />
+            <RowDefinition Height="2*" />
+        </Grid.RowDefinitions>
+
+        <!-- Lista usług -->
+        <ListView ItemsSource="{Binding Uslugi}"
+                  SelectedItem="{Binding SelectedUsluga}"
+                  Margin="10"
+                  Grid.Row="0"
+                  Style="{StaticResource ListViewStyle}">
+            <ListView.View>
+                <GridView>
+                    <GridViewColumn Header="ID" DisplayMemberBinding="{Binding Id}" Width="50" />
+                    <GridViewColumn Header="Nazwa" DisplayMemberBinding="{Binding Nazwa}" Width="200" />
+                    <GridViewColumn Header="Cena" DisplayMemberBinding="{Binding Cena}" Width="100" />
+                </GridView>
+            </ListView.View>
+        </ListView>
+
+        <!-- Formularz i przyciski -->
+        <StackPanel Margin="10" Grid.Row="1">
+            <StackPanel Orientation="Horizontal" Margin="0,0,0,10">
+
+                <StackPanel>
+                    <Label Content="Nazwa Usługi"
+                           Margin="5"
+                           Style="{StaticResource LabelStyle}" />
+                    <TextBox Text="{Binding NewUsluga.Nazwa}"
+                             Width="200"
+                             Margin="5"
+                             Style="{StaticResource InputTextBoxStyle}" />
+                </StackPanel>
+
+                <StackPanel>
+                    <Label Content="Cena Usługi"
+                           Margin="5"
+                           Style="{StaticResource LabelStyle}" />
+                    <TextBox Text="{Binding NewUsluga.Cena}"
+                             Width="100"
+                             Margin="5"
+                             Style="{StaticResource InputTextBoxStyle}" />
+                </StackPanel>
+
+            </StackPanel>
+
+            <StackPanel Orientation="Horizontal">
+                <Button Content="Dodaj Usługę"
+                        Command="{Binding AddCommand}"
+                        Style="{StaticResource AddButtonStyle}" />
+
+                <Button Content="Usuń Usługę"
+                        Command="{Binding DeleteCommand}"
+                        IsEnabled="{Binding SelectedUsluga}"
+                        Style="{StaticResource DeleteButtonStyle}" />
+            </StackPanel>
+        </StackPanel>
+    </Grid>
+</Window>

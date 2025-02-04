@@ -1,0 +1,207 @@
+<Window x:Class="SalonFryzjerski.Views.HarmonogramView"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Zarządzanie Harmonogramem"
+        Height="400"
+        Width="670"
+        WindowStartupLocation="CenterScreen"
+        Background="Black">
+
+    <Window.Resources>
+
+        <!-- Styl etykiet (Label) -->
+        <Style x:Key="LabelStyle" TargetType="Label">
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+        </Style>
+
+        <!-- Styl textbloków/nagłówków (opcjonalnie) -->
+        <Style x:Key="HeaderTextStyle" TargetType="TextBlock">
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="FontSize" Value="16"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+        </Style>
+
+        <!-- Styl TextBoxów (czarne tło, biała czcionka, biała ramka) -->
+        <Style x:Key="InputTextBoxStyle" TargetType="TextBox">
+            <Setter Property="Background" Value="Black"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="BorderBrush" Value="White"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="Padding" Value="5"/>
+            <Setter Property="FontSize" Value="14"/>
+        </Style>
+
+        <!-- Styl ComboBoxów -->
+        <Style x:Key="ComboBoxStyle" TargetType="ComboBox">
+            <Setter Property="Background" Value="Black"/>
+            <Setter Property="Foreground" Value="Black"/>
+            <Setter Property="BorderBrush" Value="White"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="Padding" Value="3"/>
+        </Style>
+
+        <!-- Styl przycisku "Dodaj" (czarny, biały tekst, hover -> zielony) -->
+        <Style x:Key="AddButtonStyle" TargetType="Button">
+            <Setter Property="Height" Value="35"/>
+            <Setter Property="Width" Value="150"/>
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="Padding" Value="10,5"/>
+            <Setter Property="Background" Value="Black"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="BorderBrush" Value="White"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="Margin" Value="5"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Background" Value="Green"/>
+                    <Setter Property="Foreground" Value="Black"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+
+        <!-- Styl przycisku "Usuń" (czarny, biały tekst, hover -> czerwony) -->
+        <Style x:Key="DeleteButtonStyle" TargetType="Button">
+            <Setter Property="Height" Value="35"/>
+            <Setter Property="Width" Value="150"/>
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="Padding" Value="10,5"/>
+            <Setter Property="Background" Value="Black"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="BorderBrush" Value="Red"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="Margin" Value="5"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Background" Value="Red"/>
+                    <Setter Property="Foreground" Value="Black"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+
+        <!-- Styl ListView -->
+        <Style x:Key="ListViewStyle" TargetType="ListView">
+            <Setter Property="Background" Value="Black"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="BorderBrush" Value="White"/>
+            <Setter Property="BorderThickness" Value="1"/>
+        </Style>
+
+        <!-- Styl nagłówków GridViewColumnHeader -->
+        <Style TargetType="GridViewColumnHeader">
+            <Setter Property="Background" Value="Black"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="BorderBrush" Value="White"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+        </Style>
+
+        <!-- Styl poszczególnych wierszy ListViewItem (opcjonalnie) -->
+        <Style TargetType="ListViewItem">
+            <Setter Property="Background" Value="Black"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Style.Triggers>
+                <!-- Podświetlenie zaznaczonego wiersza: -->
+                <Trigger Property="IsSelected" Value="True">
+                    <Setter Property="Background" Value="#333333"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+    </Window.Resources>
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="3*" />
+            <RowDefinition Height="2*" />
+        </Grid.RowDefinitions>
+
+        <!-- Lista harmonogramów -->
+        <ListView ItemsSource="{Binding Harmonogramy}"
+                  SelectedItem="{Binding SelectedHarmonogram}"
+                  Margin="10"
+                  Grid.Row="0"
+                  Style="{StaticResource ListViewStyle}">
+            <ListView.View>
+                <GridView>
+                    <GridViewColumn Header="ID" DisplayMemberBinding="{Binding Id}" Width="50" />
+                    <GridViewColumn Header="Fryzjer" DisplayMemberBinding="{Binding Fryzjer.Imie}" Width="150" />
+                    <GridViewColumn Header="Dzień Tygodnia" DisplayMemberBinding="{Binding DzienTygodnia}" Width="150" />
+                    <GridViewColumn Header="Godzina Rozpoczęcia" DisplayMemberBinding="{Binding GodzinaRozpoczecia}" Width="150" />
+                    <GridViewColumn Header="Godzina Zakończenia" DisplayMemberBinding="{Binding GodzinaZakonczenia}" Width="150" />
+                </GridView>
+            </ListView.View>
+        </ListView>
+
+        <!-- Formularz i przyciski -->
+        <StackPanel Margin="10" Grid.Row="1">
+            <StackPanel Orientation="Horizontal" Margin="0,0,0,10">
+
+                <!-- Fryzjer -->
+                <StackPanel>
+                    <Label Content="Fryzjer"
+                           Style="{StaticResource LabelStyle}"
+                           Margin="5"/>
+                    <ComboBox ItemsSource="{Binding Fryzjerzy}"
+                              SelectedValue="{Binding NewHarmonogram.FryzjerId}"
+                              SelectedValuePath="Id"
+                              DisplayMemberPath="Imie"
+                              Width="150"
+                              Margin="5"
+                              Style="{StaticResource ComboBoxStyle}"/>
+                </StackPanel>
+
+                <!-- Dzień Tygodnia -->
+                <StackPanel>
+                    <Label Content="Dzień Tygodnia"
+                           Style="{StaticResource LabelStyle}"
+                           Margin="5"/>
+                    <ComboBox ItemsSource="{Binding DniTygodnia}"
+                              SelectedItem="{Binding NewHarmonogram.DzienTygodnia}"
+                              Width="150"
+                              Margin="5"
+                              Style="{StaticResource ComboBoxStyle}"/>
+                </StackPanel>
+
+                <!-- Godzina Rozpoczęcia -->
+                <StackPanel>
+                    <Label Content="Godzina Rozpoczęcia"
+                           Style="{StaticResource LabelStyle}"
+                           Margin="5"/>
+                    <TextBox Text="{Binding NewHarmonogram.GodzinaRozpoczecia}"
+                             Width="150"
+                             Margin="5"
+                             Style="{StaticResource InputTextBoxStyle}"/>
+                </StackPanel>
+
+                <!-- Godzina Zakończenia -->
+                <StackPanel>
+                    <Label Content="Godzina Zakończenia"
+                           Style="{StaticResource LabelStyle}"
+                           Margin="5"/>
+                    <TextBox Text="{Binding NewHarmonogram.GodzinaZakonczenia}"
+                             Width="150"
+                             Margin="5"
+                             Style="{StaticResource InputTextBoxStyle}"/>
+                </StackPanel>
+            </StackPanel>
+
+            <!-- Przyciski -->
+            <StackPanel Orientation="Horizontal">
+                <Button Content="Dodaj Harmonogram"
+                        Command="{Binding AddCommand}"
+                        Style="{StaticResource AddButtonStyle}"/>
+
+                <Button Content="Usuń Harmonogram"
+                        Command="{Binding DeleteCommand}"
+                        Style="{StaticResource DeleteButtonStyle}"
+                        IsEnabled="{Binding SelectedHarmonogram}"/>
+            </StackPanel>
+        </StackPanel>
+    </Grid>
+</Window>
